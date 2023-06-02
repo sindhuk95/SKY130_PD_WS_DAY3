@@ -36,6 +36,21 @@ Through transient analysis, we calculate the rise and fall delays of the CMOS by
 
 ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/f4b115e6-bd2f-419e-b457-d1cdd5dd38dd)
 
+### Mask CMOS Fabrication
+
+The 16-mask CMOS process consists of the following steps:
+
+- Selecting the subtrate
+- Creating actove region for Transistors -  Isolation between active region pockets by depositing the oxide layer SiO2, silicon nitride Si3N4,then photoresist and masking the layers followed by photolithography and etch of the silicon nitride and remove photoresist. then this is placed in oxidation furnace, helps in growing oxide layer in other regions. This process is called LOCOS "Local oxidation of silicon" and lastly we strip out Si3N4 using hot phosphoric acid.
+- N-well and P-well formation: Both wells are created separately. First Pwell is created in steps like Photoresist, mask, photolithpgraphy and a p-type Boron material is diffused into psubstrate using Ion Implantation, forming P-well and same goes for n-well formation by diffusing a n-type Phosphorous material. Till now wells are created, by using High Temperature furnace process, drive-in dussion happens and  creating depths of wells and this process of creating is called tub process.
+- Formation of gate - Gate is the most important terminal of CMOS transistor, where you control the threshold voltages and these voltages turns off/on the transistor.The two parameters for gate formation are
+   - Oxide capacitance
+   - doping concentration NMOS and PMOS gates formed by photolithography techniques.
+LDD (lightly doped drain) formation: LDD formed to prevent hot electron effect.
+Source & drain formation: Screen oxide added to avoid channelling during implants followed by Aresenic implantation and annealing.
+Local interconnect formation: Removal of screen oxide by HF etching. Deposition of Ti for low resistant contacts.
+Higher level metal formation: CMP for planarization followed by TiN and Tungsten deposition. Top SiN layer for chip protection.
+
 
 
 
