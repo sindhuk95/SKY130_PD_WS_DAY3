@@ -10,6 +10,7 @@
    - Lab steps to git clone vsdstdcelldesign
 2. Inception of Layout and CMOS Fabrication Process
    - Mask CMOS Fabrication
+   - SKY130 basic layer layout and LEF using inverter
 3. Tech File Labs
 
 # CMOS inverter ngspice simulations
@@ -50,6 +51,36 @@ Through transient analysis, we calculate the rise and fall delays of the CMOS by
 ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/f4b115e6-bd2f-419e-b457-d1cdd5dd38dd)
 
 ### Lab steps to git clone vsdstdcelldesign
+- First, clone the required mag files and spicemodels of inverter,pmos and nmos sky130. The command to clone files from github link is:
+```
+git clone https://github.com/nickson-jose/vsdstdcelldesign.git
+```
+once I run this command, it will create ``vsdstdcelldesign`` folder in openlane directory. I have got an error saying `` could not  resolve host: github.com`` 
+somehow I figured it was due incorrect proxy, so I used this command  `` git config --global --unset https:proxy``. I worked and could clone the files from github to my openlane.
+
+![day3-1](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/5fcb599b-48bf-4667-995c-2ff99e7b6358)
+
+The information of inverter layout is mentioned in ``sky130_inv.mag`` file.
+
+![day3-7](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/d42a28e9-34a0-46c7-8799-03c668709207)
+
+Inorder to open the mag file and run magic, we need tech file for magic in that location. So, lets copy the tech file from magic which is in pdks directory to vsdstdcelldesign folder
+command to copy the file is
+
+``` cp sky130A.tech /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign/ ```
+
+once we run this command, the tech file will be copied to vsdstdcelldesign folder.
+
+![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/172d04b0-5701-4bdd-b020-e32775932bf4)
+
+For layout we run magic command
+
+``` magic -T sky130A.tech sky130_inv.mag & ```
+
+Ampersand at the end makes the next prompt line free, otherwise magic keeps the prompt line busy. Once we run the magic command we get the layout of the inverter in the magic window
+
+![day3-3](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/47174505-3cbc-4110-b342-317eef4d849d)
+
 
 
 # Inception of Layout and CMOS Fabrication Process
@@ -72,7 +103,21 @@ The 16-mask CMOS process consists of the following steps:
 
  ![Screenshot (34)](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ae5675b9-5b61-4472-81c5-c0cb8f282529)
 
+### SKY130 basic layer layout and LEF using inverter
 
+From Layout, we see the layers which are required for CMOS inverter. Inverter is Pmos and Nmos connected together i.e., gates that is poly(red color), connected to input(A), NMOS source connected to ground, PMOS Drain connected to VDD, PMOS Source and NMOS Drain are connected together and fed to output(Y) 
+
+The First layer in skywater130 is ``localinterconnect layer(locali)`` , above that metal 1 is purple color and metal 2 is pink color.
+
+If you want to see connections between two different parts, place the cursor over that area and press S three times. The tkson window gives the connectivity information.
+
+![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/fc51c2de-26f5-4ada-8c39-f5f29604999b)
+
+### Library exchange format (.lef)
+- The layout of a design is defined in a specific file called LEF.
+-  It includes design rules (tech LEF) and abstract information about the cells. 
+    - ```Tech LEF``` -  Technology LEF file contains information about the Metal layer, Via Definition and DRCs.
+    - ```Macro LEF``` -  Contains physical information of the cell such as its Size, Pin, their direction.
 
 
 
