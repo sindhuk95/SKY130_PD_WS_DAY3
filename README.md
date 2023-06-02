@@ -11,7 +11,8 @@
 2. Inception of Layout and CMOS Fabrication Process
    - Mask CMOS Fabrication
    - SKY130 basic layer layout and LEF using inverter
-3. Tech File Labs
+   - Designing standard cell and SPICE extraction in MAGIC 
+3. SKY130 Tech File Labs
 
 # CMOS inverter ngspice simulations
 
@@ -56,7 +57,7 @@ Through transient analysis, we calculate the rise and fall delays of the CMOS by
 git clone https://github.com/nickson-jose/vsdstdcelldesign.git
 ```
 once I run this command, it will create ``vsdstdcelldesign`` folder in openlane directory. I have got an error saying `` could not  resolve host: github.com`` 
-somehow I figured it was due incorrect proxy, so I used this command  `` git config --global --unset https:proxy``. I worked and could clone the files from github to my openlane.
+somehow I figured it was due incorrect proxy, so I used this command  `` git config --global --unset https:proxy``. It worked and could clone the files from github to my openlane.
 
 ![day3-1](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/5fcb599b-48bf-4667-995c-2ff99e7b6358)
 
@@ -105,7 +106,7 @@ The 16-mask CMOS process consists of the following steps:
 
 ### SKY130 basic layer layout and LEF using inverter
 
-From Layout, we see the layers which are required for CMOS inverter. Inverter is Pmos and Nmos connected together i.e., gates that is poly(red color), connected to input(A), NMOS source connected to ground, PMOS Drain connected to VDD, PMOS Source and NMOS Drain are connected together and fed to output(Y) 
+From Layout, we see the layers which are required for CMOS inverter. Inverter is Pmos and Nmos connected together i.e., gates that is poly(red color), connected to input(A), NMOS source connected to ground, PMOS source is connected to VDD, PMOS Drain and NMOS Drain are connected together and fed to output(Y) 
 
 The First layer in skywater130 is ``localinterconnect layer(locali)`` , above that metal 1 is purple color and metal 2 is pink color.
 
@@ -118,7 +119,84 @@ If you want to see connections between two different parts, place the cursor ove
 -  It includes design rules (tech LEF) and abstract information about the cells. 
     - ```Tech LEF``` -  Technology LEF file contains information about the Metal layer, Via Definition and DRCs.
     - ```Macro LEF``` -  Contains physical information of the cell such as its Size, Pin, their direction.
+ 
+# Designing standard cell and SPICE extraction in MAGIC 
 
+  -  First we need to provide bounding box width and height in tkson window. lets say that width of BBOX is 1.38u and height is 2.72u. The command to give these values to magic is
+   ``` property Fixed BBOX (0 0 1.32 2.72)  ```
+  - After this, Vdd, GND segments which are in metal 1 layer, their respective contacts and atlast logic gates layout is defined
+Inorder to know the logical functioning of the inverter, we extract the spice and then we do simulation on the spice. To extract it on spice we open TKSON window, the steps are
+   - Know the present directory - ``pwd ``
+   - create an extration file -  the command is  `` extract all `` and  ``sky130_inv.ext`` files has beenc created
+          
+   - create spice file using .ext file to be used with our ngspice tool  - the commands are  
+      ``` ext2spice cthresh 0 rthresh 0 ``` - extracts parasatic capcitances also since these atre actual layers - nothing is created in the folder
+      ``` ext2spice ``` - a file ```sky130_inv.spice``` has been created.
+      
+     ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/80394fcd-2b43-49fb-b51b-af80304888a0)
+     
+ ### SKY130 Tech File Labs
+ 
+ # Creating SPICE Deck using Sky130 tech
+      
+  let us see what is inside the spice file 
+  
+  ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ea44dae6-87a4-4904-835d-74a096213306)
+
+   In the spice file subcircuit(subckt), pmos and nmos node connections are defined
+   For NMOS  ``` XO Y A VGND VGND sky130_fd_pr_nfet_01v8 ``` . The order is  ``` Cell_name Drain Gate Source Substrate model_name ``` .
+   For PMOS  ``` X1 Y A VPWR VPWR sky130_fd_pr_pfet_01v8 ``` . The order is   ``` cell_name Drain Gate Source Substrate model_name ```.
+   
+  For transient anaylsis, we would like to define these following connections and extra nodes for these in spice file
+   - VGND to VSS
+   - Supply voltage from VPWR to Ground - extra nodes here will be 0 and VDD with a value of 3.3v 
+   - sweep in/pulse between A pin and VGND (0)
+  Before, editing the file, make sure scaling is proper, we get this scale value from the grid specifed in the layout.
+  
+  ![size of row](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ec4a0ff1-9009-4365-b66c-9e352ba1842a)
+  
+  Now keeping the connection in mind, add the node connectivity commands in the file. Along with this we need to include libs for nmos and pmos and define transient analysis commands too. We comment the subckt since we are trying to input the controls and transient analysis also.
+  
+ ``` .trans 1ns and 20ns ```,   .trans is for transient analysis and 1ns,20ns is sweep.
+  Model names are changed according to the libs of nmos and pmos.
+    
+ ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/f55eb2a7-0251-4fbd-9b40-24a8088f3bbb)
+  
+### Using ngspice for spice simulation
+  
+ Spice Deck is done and now to run spice simulation invoke ngspice in the tool and pass the source file. 
+ 
+   ``` ngspice sky130_inv.spice ```
+   
+   On the prompt you can see the values the ngspice has taken. To see the plot, use
+   
+   ``` plot y vs time a ``` .
+   
+   Now we have the transient response, the next objective is to characterise the cell.
+   
+     ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/64adb30c-5453-4bf4-b142-648afb79ae8a)
+     
+ ### Standard cell characterization of CMOS Iinverter 
+ characterization of the inverter standard cell depends on Four timing parameters
+
+ Rise transition: Time taken for the output to rise from 20% to 80% of max value
+ Fall transition- Time taken for the output to fall from 80% to 20% of max value
+ Cell rise delay = time(50% output rise) - time(50% input fall)
+ Cell fall delay = time(50% output fall) - time(50% input rise)
+ 
+ The above timing parameters can be computed by noting down various values from the ngspice waveform.
+   
+    
+  
+  
+  
+  
+
+  
+
+   
+  
+    
 
 
 
