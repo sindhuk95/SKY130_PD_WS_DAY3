@@ -106,7 +106,8 @@ The 16-mask CMOS process consists of the following steps:
 
 ### SKY130 basic layer layout and LEF using inverter
 
-From Layout, we see the layers which are required for CMOS inverter. Inverter is Pmos and Nmos connected together i.e., gates that is poly(red color), connected to input(A), NMOS source connected to ground, PMOS source is connected to VDD, PMOS Drain and NMOS Drain are connected together and fed to output(Y) 
+- From Layout, we see the layers which are required for CMOS inverter. Inverter is, PMOS and NMOS connected together.
+- Gates of both PMOS and NMOS are connected together and fed to input(here ,A), NMOS source connected to ground(here, VGND), PMOS source is connected to VDD(here, VPWR), Drains of PMOS and NMOS are connected together and fed to output(here, Y). 
 
 The First layer in skywater130 is ``localinterconnect layer(locali)`` , above that metal 1 is purple color and metal 2 is pink color.
 
@@ -125,9 +126,9 @@ If you want to see connections between two different parts, place the cursor ove
   -  First we need to provide bounding box width and height in tkson window. lets say that width of BBOX is 1.38u and height is 2.72u. The command to give these values to magic is
    ``` property Fixed BBOX (0 0 1.32 2.72)  ```
   - After this, Vdd, GND segments which are in metal 1 layer, their respective contacts and atlast logic gates layout is defined
-Inorder to know the logical functioning of the inverter, we extract the spice and then we do simulation on the spice. To extract it on spice we open TKSON window, the steps are
+Inorder to know the logical functioning of the inverter, we extract the spice and then we do simulation on the spice. To extract it on spice we open TKCON window, the steps are
    - Know the present directory - ``pwd ``
-   - create an extration file -  the command is  `` extract all `` and  ``sky130_inv.ext`` files has beenc created
+   - create an extration file -  the command is  `` extract all `` and  ``sky130_inv.ext`` files has been created
           
    - create spice file using .ext file to be used with our ngspice tool  - the commands are  
       ``` ext2spice cthresh 0 rthresh 0 ``` - extracts parasatic capcitances also since these atre actual layers - nothing is created in the folder
@@ -151,14 +152,24 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
    - VGND to VSS
    - Supply voltage from VPWR to Ground - extra nodes here will be 0 and VDD with a value of 3.3v 
    - sweep in/pulse between A pin and VGND (0)
-  Before, editing the file, make sure scaling is proper, we get this scale value from the grid specifed in the layout.
+  Before, editing the file, make sure scaling is proper, we measure the value of the gride size from the magic layout and define using `` .option scale=0.01u`` in the Deck file.
   
   ![size of row](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ec4a0ff1-9009-4365-b66c-9e352ba1842a)
   
-  Now keeping the connection in mind, add the node connectivity commands in the file. Along with this we need to include libs for nmos and pmos and define transient analysis commands too. We comment the subckt since we are trying to input the controls and transient analysis also.
+  Now keeping the connection in mind, define the required commands in the file. Along with this we need to include libs for nmos ``nshort.lib`` and pmos ``pshort.lib`` and define transient analysis commands too. We comment the subckt since we are trying to input the controls and transient analysis also. Model names are changed to ``nshort_model.0`` and ``pshort_model.0`` according to the libs of nmos and pmos.
   
- ``` .trans 1ns and 20ns ```,   .trans is for transient analysis and 1ns,20ns is sweep.
-  Model names are changed according to the libs of nmos and pmos.
+  These voltage sources and simulation commands are defined in the Deck file.
+   ``
+   VDD VPWR 0 3.3V
+   VSS VGND 0 0V
+   Va A VGND PULSE(0V 3.3V 0 0.1ns 0.1ns 2ns 4ns)
+   .tran 1n 20n
+   .control
+   run
+   .endc
+   .end
+   ``
+  
     
  ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/f55eb2a7-0251-4fbd-9b40-24a8088f3bbb)
   
@@ -174,17 +185,40 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
    
    Now we have the transient response, the next objective is to characterise the cell.
    
-     ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/64adb30c-5453-4bf4-b142-648afb79ae8a)
+    ![response and plot](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/98e39f48-6674-49cd-8d67-646010419827)
+
      
  ### Standard cell characterization of CMOS Iinverter 
  characterization of the inverter standard cell depends on Four timing parameters
 
- Rise transition: Time taken for the output to rise from 20% to 80% of max value
- Fall transition- Time taken for the output to fall from 80% to 20% of max value
- Cell rise delay = time(50% output rise) - time(50% input fall)
- Cell fall delay = time(50% output fall) - time(50% input rise)
+ Rise Transition: Time taken for the output to rise from 20% to 80% of max value
+ Fall Transition- Time taken for the output to fall from 80% to 20% of max value
+ Cell Rise delay = difference in time(50% output rise) to time(50% input fall)
+ Cell Fall delay = difference in time(50% output fall) to time(50% input rise)
  
  The above timing parameters can be computed by noting down various values from the ngspice waveform.
+ 
+ ``` Rise Transition : 2.25421 - 2.18636 = 0.006785 ns / 67.85ps ```
+ 
+ ![rise transition](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/207d7bbb-cb8a-46d2-b921-a915eeac492a)
+ 
+ ``` Fall Transitio : 4.09605 - 4.05554 = 0.04051ns/40.51ps ```
+ 
+ ![falll trans](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/9b640ee5-ba9e-4552-8363-a38380c01ca9)
+ 
+ ```Cell Rise Delay : 2.21701 - 2.14989 = 0.06689ns/66.89ps ```
+ 
+![50% of f-r](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/4a969853-e7a1-48ae-b240-852e6bf4af55)
+
+``` Cell Fall Delay : 4.07816 - 4.05011 = 0.02805ns/28.05ps ```
+
+![50% off r-f](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ad5fde3c-3c22-4076-8d12-e83002782b76)
+
+### LAB exercise : MAGIC DRC
+
+
+
+
    
     
   
