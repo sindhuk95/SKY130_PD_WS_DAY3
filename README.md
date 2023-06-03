@@ -13,6 +13,13 @@
    - SKY130 basic layer layout and LEF using inverter
    - Designing standard cell and SPICE extraction in MAGIC 
 3. SKY130 Tech File Labs
+   - Create Final SPICE Deck 
+   - Standard cell characterisation CMOS Inverter
+   - LAB exercise and DRC Challenges
+       - Intrdocution of Magic and Skywater DRC's
+       - Sky130s pdk intro and Steps to download labs
+       - Load Sky130tech rules for drc challenges
+
 
 # CMOS inverter ngspice simulations
 
@@ -41,17 +48,19 @@ Simulation of CMOS using different width and lengths. From the waveform, irrespe
 From the waveform we can see the characteristics are maintained  across all sizes of CMOS. So CMOS as a circuit is a robust device hence use in designing of logic gates. Parameters that define the robustness of the CMOS are
 
 ### Switching Threshold Vm
+
 - The Switching Threshold of a CMOS inverter is the point where the Vin = Vout on the DC Transfer characreristics. 
 - At this point, both the transistors are in saturation region, means both are turned on and have high chances of current flowing driectly from VDD to Ground called Leakage current.
-![Capture13](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/46960968-4974-451a-ae0f-fa0a158a739a) 
 
-![Capture14](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/1f21aea7-aa0c-4ace-8aa4-d381cb134644)
+![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/3393442e-1b4b-434a-bc7e-6e2ed4fde218)
+
 
 Through transient analysis, we calculate the rise and fall delays of the CMOS by SPICE Simulation. As we know delays are calculated at 50% of the final values.
 
 ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/f4b115e6-bd2f-419e-b457-d1cdd5dd38dd)
 
 ### Lab steps to git clone vsdstdcelldesign
+
 - First, clone the required mag files and spicemodels of inverter,pmos and nmos sky130. The command to clone files from github link is:
 ```
 git clone https://github.com/nickson-jose/vsdstdcelldesign.git
@@ -115,13 +124,14 @@ If you want to see connections between two different parts, place the cursor ove
 
 ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/fc51c2de-26f5-4ada-8c39-f5f29604999b)
 
-### Library exchange format (.lef)
+#### Library exchange format (.lef)
+
 - The layout of a design is defined in a specific file called LEF.
 -  It includes design rules (tech LEF) and abstract information about the cells. 
     - ```Tech LEF``` -  Technology LEF file contains information about the Metal layer, Via Definition and DRCs.
     - ```Macro LEF``` -  Contains physical information of the cell such as its Size, Pin, their direction.
  
-# Designing standard cell and SPICE extraction in MAGIC 
+### Designing standard cell and SPICE extraction in MAGIC 
 
   -  First we need to provide bounding box width and height in tkson window. lets say that width of BBOX is 1.38u and height is 2.72u. The command to give these values to magic is
    ``` property Fixed BBOX (0 0 1.32 2.72)  ```
@@ -136,15 +146,16 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
       
      ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/80394fcd-2b43-49fb-b51b-af80304888a0)
      
- ### SKY130 Tech File Labs
- 
- # Creating SPICE Deck using Sky130 tech
-      
-  let us see what is inside the spice file 
+ # SKY130 Tech File Labs
+     
+ ### Create Final SPICE Deck 
+  
+  let us see what is inside the spice Deck
   
   ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ea44dae6-87a4-4904-835d-74a096213306)
 
    In the spice file subcircuit(subckt), pmos and nmos node connections are defined
+   
    For NMOS  ``` XO Y A VGND VGND sky130_fd_pr_nfet_01v8 ``` . The order is  ``` Cell_name Drain Gate Source Substrate model_name ``` .
    For PMOS  ``` X1 Y A VPWR VPWR sky130_fd_pr_pfet_01v8 ``` . The order is   ``` cell_name Drain Gate Source Substrate model_name ```.
    
@@ -189,6 +200,7 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
 
      
  ### Standard cell characterization of CMOS Iinverter 
+ 
  characterization of the inverter standard cell depends on Four timing parameters
 
  Rise Transition: Time taken for the output to rise from 20% to 80% of max value
@@ -214,7 +226,7 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
 
 ![50% off r-f](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ad5fde3c-3c22-4076-8d12-e83002782b76)
 
-# LAB exercise : Magic DRC
+## LAB exercise and DRC Challenges
 
 ### Intrdocution of Magic and Skywater DRC's
 
@@ -232,7 +244,7 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
   
   Since github is not used for tutorial and documentation is critical for lab since browser needs to be open for the lab.
   
-  For Lab exercies:
+ ### Sky130s pdk intro and Steps to download labs
   
   - setup to view the layouts
   - For extracting and generating views, Google/skywater repo files were built with Magic
@@ -263,11 +275,57 @@ Now its time to run MAGIC
 
 For better graphics use command ``magic -d XR ``
 
-Now, lets see an example of simple failing set of rules of metal 3 layer.  you can either run this by magic command line ``magic -d XR metal3.mag `` or from the magic console window, `` menu - file - open -load file9here, metal3.mag) ``
+Now, lets see an example of simple failing set of rules of metal 3 layer.  you can either run this by magic command line `` magic -d XR metal3.mag `` or from the magic console window, `` menu - file - open -load file9here, metal3.mag) ``
 
-![ms](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/933e9957-f295-4553-bfc5-2c5db41e41b2)
+![ms](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ac4b681b-b486-4db0-9eef-23f532d5b685)
+
 
 We have few drc errors and calls out a rule number. You can see these rules on google skywater pdk read the doc page.
+
+From metal 3.4 drc rules, Via2 must be enclosed by metal3 by atleast 0.065u. 
+Magic tablet is of using many derived layers and in which via is one. Via represents the area filled with contact cuts.
+Draw a large area of M3 contatc using mouse pointer hovering over the m3contact icon on the side toolbar. Now with cursor box around the m3 area, type command 
+``` cif see VIA2 ``` . This create contatc cuts which are bloack sqaure shaped. 
+These dont exist on the drawn layout, but they represent as mask layer VIA2, that will end up in the GDS
+Futher details about these are metioned in cif output section in tech file.
+The view we see is feedback entry and can dismiss it with `` feed clear `` We use snap internal command `` snap int `` for the cursor to move along the edge of the grid.
+There are few spacing rukes metioned like spacing between Via2 and metal 3 is 0.065u. 
+If we put the curosor between the contact cut and drawn via edge and click box in tkcon command, we will get the distance.
+The tool automatically places and do spacing of the contact, there wont be any DRC errors and the distance will not be smaller than the specified one.
+
+![area via2](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/25b99b94-8382-4ca4-b214-1c844ae8dfe8)
+
+### Load Sky130 tech rules for drc challenges
+
+First load the poly file by ``load poly.mag`` on tkcon window.
+Finding the error by mouse cursor and find the box area, Poly.9 is violated due to spacing between polyres and poly.
+
+![poly spacing](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/afbfc91e-65b5-4efc-ab28-98eade6b454c)
+
+View the tech file and search whether we have created any drc rule for poly.9. If there is none, create a rule defining spacing between polyres and poly.
+This is how we add spacing for all the polyres
+
+![earlier for diff tap](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/74529987-6524-4ecd-9cdf-1598f7d7adb1)
+
+Once the tech file has been modified for drc, we load the tech file in tkcon window and tool doesnot check drc automatically so we need to check drc too. Once loaded, the violations are reduced since spacing rule is met.
+
+`` tech load sky130A.tech `` followed by `` drc check ``
+
+![fizing spacing btwn polyres to poluy](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/b922a896-4f06-444e-af78-319326956082)
+
+Now, poly.9 is spacing between polyres to poly and poly to diff/tap. Once we resolve the polyres to poly, poly to tap / diff got violated. So we provide spacing for tap/diff. in tech, 
+
+![spacing for all diff](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/6fbf7226-9111-4b57-80f9-d1a27f6ed06e)
+
+Again load the tech file, check drc and the issue will be solved.
+
+
+
+
+
+
+
+
 
 
 
