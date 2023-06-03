@@ -214,7 +214,67 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
 
 ![50% off r-f](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ad5fde3c-3c22-4076-8d12-e83002782b76)
 
-### LAB exercise : MAGIC DRC
+# LAB exercise : Magic DRC
+
+### Intrdocution of Magic and Skywater DRC's
+
+  - In-depth overview of Magic's DRC engine
+  - Introduction to Google/Skywater DRC rules
+  - Lab : Warm-up exercise : Fixing a simple rule error
+  - Lab : Main exercie : Fixing or create a complex error
+ 
+  Before doing the lab, Get the knowledge of how Magic performs DRc's and Syntax for DRC rules  from this URL: ``` http://opencircuitdesign.com/magic```.
+  Nothing works if there is no Technology file. Fortunatley by Google/ Skywater, we have the opportunity to use the fabication process technology now made as an open source.
+  skywater sky130 pdk URL : ``` https://skywater-pdk.readthedocs.io/en/main/ ```
+  The two main sources of information PDK:
+  - github.com - ```https://github.com/google/skywater-pdk``` - understand the design rules 
+  - Documentation - ``` https://skywater-pdk--136.org.readthedox.build```
+  
+  Since github is not used for tutorial and documentation is critical for lab since browser needs to be open for the lab.
+  
+  For Lab exercies:
+  
+  - setup to view the layouts
+  - For extracting and generating views, Google/skywater repo files were built with Magic
+  - Technology file dependency is more for any layout, this is file is created first.
+  - Since, Pdk is still under development, there are some unfinished tech files and these are packaged for magic along with lab exercise layout and bunch of stuff into the tar ball
+ 
+  We can download the packaged files from web using ``wget `` command. wget stands for web get, a non-interactive file downloader command.
+  
+  ``` wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz```
+  
+  the archive file drc_tests.tgz is downloaded into our user directory 
+  
+ ![wget](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/3358159c-b338-43f4-b811-58a11284e75b)
+
+Now, we need to unzip the archive file. For this we use tar utility command. 
+
+`` tar - tap archiver`` create and extract a tar archive file.
+
+The command to extract the tar file is 
+
+`` tar -xfz drc_tests.tgz``
+
+once extraction is done, drc_tests file is created and you will have all the information about magic layout for this lab exercise
+
+![tar](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/6c27f1d8-57ce-4796-bbc5-9345a4843920)
+
+Now its time to run MAGIC
+
+For better graphics use command ``magic -d XR ``
+
+Now, lets see an example of simple failing set of rules of metal 3 layer.  you can either run this by magic command line ``magic -d XR metal3.mag `` or from the magic console window, `` menu - file - open -load file9here, metal3.mag) ``
+
+![ms](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/933e9957-f295-4553-bfc5-2c5db41e41b2)
+
+We have few drc errors and calls out a rule number. You can see these rules on google skywater pdk read the doc page.
+
+
+
+  
+  
+  
+  
 
 
 
