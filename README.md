@@ -57,8 +57,6 @@ From the waveform we can see the characteristics are maintained  across all size
 
 Through transient analysis, we calculate the rise and fall delays of the CMOS by SPICE Simulation. As we know delays are calculated at 50% of the final values.
 
-![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/f4b115e6-bd2f-419e-b457-d1cdd5dd38dd)
-
 ### Lab steps to git clone vsdstdcelldesign
 
 - First, clone the required mag files and spicemodels of inverter,pmos and nmos sky130. The command to clone files from github link is:
@@ -91,7 +89,9 @@ Ampersand at the end makes the next prompt line free, otherwise magic keeps the 
 
 ![day3-3](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/47174505-3cbc-4110-b342-317eef4d849d)
 
+Press G in the magic console and you can see the grids being disaplyed
 
+![size of row](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ec4a0ff1-9009-4365-b66c-9e352ba1842a)
 
 # Inception of Layout and CMOS Fabrication Process
 
@@ -99,17 +99,17 @@ Ampersand at the end makes the next prompt line free, otherwise magic keeps the 
 
 The 16-mask CMOS process consists of the following steps:
 
-- Selecting the subtrate
-- Creating actove region for Transistors -  Isolation between active region pockets by depositing the oxide layer SiO2, silicon nitride Si3N4,then photoresist and masking the layers followed by photolithography and etch of the silicon nitride and remove photoresist. then this is placed in oxidation furnace, helps in growing oxide layer in other regions. This process is called LOCOS "Local oxidation of silicon" and lastly we strip out Si3N4 using hot phosphoric acid.
-- N-well and P-well formation: Both wells are created separately. First Pwell is created in steps like Photoresist, mask, photolithpgraphy and a p-type Boron material is diffused into psubstrate using Ion Implantation, forming P-well and same goes for n-well formation by diffusing a n-type Phosphorous material. Till now wells are created, by using High Temperature furnace process, drive-in dussion happens and  creating depths of wells and this process of creating is called tub process.
-- Formation of gate - Gate is the most important terminal of CMOS transistor, where you control the threshold voltages and these voltages turns off/on the transistor.polysilicon layer is depositied and photolithography techniques are perfomed created NMOS and PMOS gates. The two parameters for gate formation are
+- **Selecting the subtrate**
+- **Creating actove region for Transistors** -  Isolation between active region pockets by depositing the oxide layer SiO2, silicon nitride Si3N4,then photoresist and masking the layers followed by photolithography and etch of the silicon nitride and remove photoresist. then this is placed in oxidation furnace, helps in growing oxide layer in other regions. This process is called LOCOS "Local oxidation of silicon" and lastly we strip out Si3N4 using hot phosphoric acid.
+- **N-well and P-well formation**: Both wells are created separately. First Pwell is created in steps like Photoresist, mask, photolithpgraphy and a p-type Boron material is diffused into psubstrate using Ion Implantation, forming P-well and same goes for n-well formation by diffusing a n-type Phosphorous material. Till now wells are created, by using High Temperature furnace process, drive-in dussion happens and  creating depths of wells and this process of creating is called tub process.
+- **Formation of gate** - Gate is the most important terminal of CMOS transistor, where you control the threshold voltages and these voltages turns off/on the transistor.polysilicon layer is depositied and photolithography techniques are perfomed created NMOS and PMOS gates. The two parameters for gate formation are
    - Oxide capacitance
    - doping concentration    
-- lightly doped drain(LDD) formation - To prevent hot electron effect and short channel effect
-- Source & drain formation: In this, a thin layer of oxide is added to avoid the effect of channel during implants. It is where the vector velocity of ions matches with that of the crystalline structure of the p substrate and go directly into the substrate without hitting any silicon atom, when we do alot of ion implanatation. N+,P+ implants are done by Aresenic implantation and Hight temperature annealing.
-- Local interconnect formation: Remove the thin screen oxide by etching in (hydrofloric) HF solution. There are various step to form local interconnects. One is
-   - deposit titanium on wafer using supttering - Once it is depoisted and heating is done in N2 ambient, chemical reaction happens creating two kind of metal contacts, titanium silicon dioxide which are low resistant,used for interconnect contacts and titanium nitride(etched using RCA cleaning) used for the connection you want bring to the top,local communication
-- Higher level metal formation: Non Planar surface topography is not suitable for metal interconnects. Planarize the surface by doping silicon oxide with Boron or Phosphorous to polish the surface. This technque is called chemical Mechanical polishing (CMP). Then we perform Photolithography techniques follwed by  TiN and balnket Tungsten layer deposition and do CMP. Deposit AL layer and repeat photolithography and CMP. This is 1st level of interconnect. Add another layer of interconnects to take to higher level metal layers. Lastly, Layer a dielectric i.e., Si3N4 to protect the chip. 
+- **lightly doped drain(LDD) formation** - To prevent hot electron effect and short channel effect
+- **Source & drain formation**: In this, a thin layer of oxide is added to avoid the effect of channel during implants. It is where the vector velocity of ions matches with that of the crystalline structure of the p substrate and go directly into the substrate without hitting any silicon atom, when we do alot of ion implanatation. N+,P+ implants are done by Aresenic implantation and Hight temperature annealing.
+- **Local interconnect formation**: Remove the thin screen oxide by etching in (hydrofloric) HF solution. There are various step to form local interconnects. One is
+   - **deposit titanium on wafer using supttering** - Once it is depoisted and heating is done in N2 ambient, chemical reaction happens creating two kind of metal contacts, titanium silicon dioxide which are low resistant,used for interconnect contacts and titanium nitride(etched using RCA cleaning) used for the connection you want bring to the top,local communication
+- **Higher level metal formation**: Non Planar surface topography is not suitable for metal interconnects. Planarize the surface by doping silicon oxide with Boron or Phosphorous to polish the surface. This technque is called chemical Mechanical polishing (CMP). Then we perform Photolithography techniques follwed by  TiN and balnket Tungsten layer deposition and do CMP. Deposit AL layer and repeat photolithography and CMP. This is 1st level of interconnect. Add another layer of interconnects to take to higher level metal layers. Lastly, Layer a dielectric i.e., Si3N4 to protect the chip. 
 
  ![Screenshot (34)](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ae5675b9-5b61-4472-81c5-c0cb8f282529)
 
@@ -137,37 +137,33 @@ If you want to see connections between two different parts, place the cursor ove
    ``` property Fixed BBOX (0 0 1.32 2.72)  ```
   - After this, Vdd, GND segments which are in metal 1 layer, their respective contacts and atlast logic gates layout is defined
 Inorder to know the logical functioning of the inverter, we extract the spice and then we do simulation on the spice. To extract it on spice we open TKCON window, the steps are
-   - Know the present directory - ``pwd ``
-   - create an extration file -  the command is  `` extract all `` and  ``sky130_inv.ext`` files has been created
+  - Know the present directory - ``pwd ``
+  - create an extration file -  the command is  `` extract all `` and  ``sky130_inv.ext`` files has been created
           
-   - create spice file using .ext file to be used with our ngspice tool  - the commands are  
-      ``` ext2spice cthresh 0 rthresh 0 ``` - extracts parasatic capcitances also since these atre actual layers - nothing is created in the folder
+  - create spice file using .ext file to be used with our ngspice tool  - the commands are  
+      ``` ext2spice cthresh 0 rthresh 0 ``` - extracts parasatic capcitances also since these are actual layers - nothing is created in the folder
       ``` ext2spice ``` - a file ```sky130_inv.spice``` has been created.
       
      ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/80394fcd-2b43-49fb-b51b-af80304888a0)
      
- # SKY130 Tech File Labs
+# SKY130 Tech File Labs
      
- ### Create Final SPICE Deck 
+### Create Final SPICE Deck 
   
-  let us see what is inside the spice Deck
-  
-  ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ea44dae6-87a4-4904-835d-74a096213306)
+let us see what is inside the spice Deck
 
-   In the spice file subcircuit(subckt), pmos and nmos node connections are defined
+In the spice file subcircuit(subckt), pmos and nmos node connections are defined
    
-   For NMOS  ``` XO Y A VGND VGND sky130_fd_pr_nfet_01v8 ``` . The order is  ``` Cell_name Drain Gate Source Substrate model_name ``` .
-   For PMOS  ``` X1 Y A VPWR VPWR sky130_fd_pr_pfet_01v8 ``` . The order is   ``` cell_name Drain Gate Source Substrate model_name ```.
+For NMOS  ``` XO Y A VGND VGND sky130_fd_pr_nfet_01v8 ``` . The order is  ``` Cell_name Drain Gate Source Substrate model_name ``` .
+For PMOS  ``` X1 Y A VPWR VPWR sky130_fd_pr_pfet_01v8 ``` . The order is   ``` cell_name Drain Gate Source Substrate model_name ```.
    
-  For transient anaylsis, we would like to define these following connections and extra nodes for these in spice file
-   - VGND to VSS
-   - Supply voltage from VPWR to Ground - extra nodes here will be 0 and VDD with a value of 3.3v 
-   - sweep in/pulse between A pin and VGND (0)
-  Before, editing the file, make sure scaling is proper, we measure the value of the gride size from the magic layout and define using `` .option scale=0.01u`` in the Deck file.
+For transient anaylsis, we would like to define these following connections and extra nodes for these in spice file
+  - VGND to VSS
+  - Supply voltage from VPWR to Ground - extra nodes here will be 0 and VDD with a value of 3.3v 
+  - sweep in/pulse between A pin and VGND (0)
+Before, editing the file, make sure scaling is proper, we measure the value of the gride size from the magic layout and define using `` .option scale=0.01u`` in the Deck file.
   
-  ![size of row](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ec4a0ff1-9009-4365-b66c-9e352ba1842a)
-  
-  Now keeping the connection in mind, define the required commands in the file. Along with this we need to include libs for nmos ``nshort.lib`` and pmos ``pshort.lib`` and define transient analysis commands too. We comment the subckt since we are trying to input the controls and transient analysis also. Model names are changed to ``nshort_model.0`` and ``pshort_model.0`` according to the libs of nmos and pmos.
+Now keeping the connection in mind, define the required commands in the file. Along with this we need to include libs for nmos ``nshort.lib`` and pmos ``pshort.lib`` and define transient analysis commands too. We comment the subckt since we are trying to input the controls and transient analysis also. Model names are changed to ``nshort_model.0`` and ``pshort_model.0`` according to the libs of nmos and pmos.
   
   These voltage sources and simulation commands are defined in the Deck file.
    ``
@@ -186,45 +182,38 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
   
 ### Using ngspice for spice simulation
   
- Spice Deck is done and now to run spice simulation invoke ngspice in the tool and pass the source file. 
+Spice Deck is done and now to run spice simulation invoke ngspice in the tool and pass the source file. 
  
-   ``` ngspice sky130_inv.spice ```
-   
-   On the prompt you can see the values the ngspice has taken. To see the plot, use
+  ``` ngspice sky130_inv.spice ```
+  
+On the prompt you can see the values the ngspice has taken. To see the plot, use
    
    ``` plot y vs time a ``` .
    
-   Now we have the transient response, the next objective is to characterise the cell.
+Now we have the transient response, the next objective is to characterise the cell.
    
-    ![response and plot](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/98e39f48-6674-49cd-8d67-646010419827)
+    
+   ![image](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/603a0396-bd48-4d2d-a74e-34815ab26f94)
 
      
  ### Standard cell characterization of CMOS Iinverter 
  
  characterization of the inverter standard cell depends on Four timing parameters
 
- Rise Transition: Time taken for the output to rise from 20% to 80% of max value
- Fall Transition- Time taken for the output to fall from 80% to 20% of max value
- Cell Rise delay = difference in time(50% output rise) to time(50% input fall)
+ **Rise Transition**: Time taken for the output to rise from 20% to 80% of max value
+ **Fall Transition**: Time taken for the output to fall from 80% to 20% of max value
+ **Cell Rise delay**: difference in time(50% output rise) to time(50% input fall)
  Cell Fall delay = difference in time(50% output fall) to time(50% input rise)
  
  The above timing parameters can be computed by noting down various values from the ngspice waveform.
  
  ``` Rise Transition : 2.25421 - 2.18636 = 0.006785 ns / 67.85ps ```
  
- ![rise transition](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/207d7bbb-cb8a-46d2-b921-a915eeac492a)
- 
  ``` Fall Transitio : 4.09605 - 4.05554 = 0.04051ns/40.51ps ```
  
- ![falll trans](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/9b640ee5-ba9e-4552-8363-a38380c01ca9)
- 
  ```Cell Rise Delay : 2.21701 - 2.14989 = 0.06689ns/66.89ps ```
- 
-![50% of f-r](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/4a969853-e7a1-48ae-b240-852e6bf4af55)
 
-``` Cell Fall Delay : 4.07816 - 4.05011 = 0.02805ns/28.05ps ```
-
-![50% off r-f](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/ad5fde3c-3c22-4076-8d12-e83002782b76)
+ ```Cell Fall Delay : 4.07816 - 4.05011 = 0.02805ns/28.05ps ```
 
 ## LAB exercise and DRC Challenges
 
@@ -235,27 +224,27 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
   - Lab : Warm-up exercise : Fixing a simple rule error
   - Lab : Main exercie : Fixing or create a complex error
  
-  Before doing the lab, Get the knowledge of how Magic performs DRc's and Syntax for DRC rules  from this URL: ``` http://opencircuitdesign.com/magic```.
-  Nothing works if there is no Technology file. Fortunatley by Google/ Skywater, we have the opportunity to use the fabication process technology now made as an open source.
-  skywater sky130 pdk URL : ``` https://skywater-pdk.readthedocs.io/en/main/ ```
-  The two main sources of information PDK:
+Before doing the lab, Get the knowledge of how Magic performs DRc's and Syntax for DRC rules  from this URL: ``` http://opencircuitdesign.com/magic```.
+Nothing works if there is no Technology file. Fortunatley by Google/ Skywater, we have the opportunity to use the fabication process technology now made as an open source.
+skywater sky130 pdk URL : ``` https://skywater-pdk.readthedocs.io/en/main/ ```
+The two main sources of information PDK:
   - github.com - ```https://github.com/google/skywater-pdk``` - understand the design rules 
   - Documentation - ``` https://skywater-pdk--136.org.readthedox.build```
   
-  Since github is not used for tutorial and documentation is critical for lab since browser needs to be open for the lab.
+Since github is not used for tutorial and documentation is critical for lab since browser needs to be open for the lab.
   
- ### Sky130s pdk intro and Steps to download labs
+### Sky130s pdk intro and Steps to download labs
   
   - setup to view the layouts
   - For extracting and generating views, Google/skywater repo files were built with Magic
   - Technology file dependency is more for any layout, this is file is created first.
   - Since, Pdk is still under development, there are some unfinished tech files and these are packaged for magic along with lab exercise layout and bunch of stuff into the tar ball
  
-  We can download the packaged files from web using ``wget `` command. wget stands for web get, a non-interactive file downloader command.
+We can download the packaged files from web using ``wget `` command. wget stands for web get, a non-interactive file downloader command.
   
   ``` wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz```
   
-  the archive file drc_tests.tgz is downloaded into our user directory 
+The archive file drc_tests.tgz is downloaded into our user directory 
   
  ![wget](https://github.com/sindhuk95/SKY130_PD_WS_DAY3/assets/135046169/3358159c-b338-43f4-b811-58a11284e75b)
 
